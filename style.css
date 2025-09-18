@@ -10,6 +10,7 @@ h1 {
 }
 .container {
   max-width: 800px;
+  width: 90%;
   margin: auto;
   background: #fff;
   padding: 20px;
@@ -27,6 +28,7 @@ input[type="file"], input[type="text"] {
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  box-sizing: border-box;
 }
 textarea {
   width: 100%;
@@ -37,6 +39,7 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 5px;
   resize: vertical;
+  box-sizing: border-box;
 }
 button {
   margin-top: 15px;
@@ -47,6 +50,7 @@ button {
   color: white;
   font-size: 16px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 button:hover {
   background: #218838;
@@ -56,4 +60,22 @@ button:hover {
 }
 .btn-secondary:hover {
   background: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    margin: 15px;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  input[type="file"], input[type="text"], textarea {
+    font-size: 1rem;
+  }
+  button {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 12px;
+  }
 }
