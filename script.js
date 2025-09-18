@@ -1,8 +1,8 @@
 const vcfInput = document.getElementById('vcfFiles');
-const processBtn = document.getElementById('processBtn');
 const outputBox = document.getElementById('output');
 const downloadBtn = document.getElementById('downloadBtn');
 const fileNameInput = document.getElementById('fileName');
+const countDisplay = document.getElementById('countDisplay');
 
 // Fungsi untuk ambil nomor telepon valid
 function extractNumbers(text) {
@@ -13,16 +13,16 @@ function extractNumbers(text) {
   return matches.map(num => num.replace(/[^+\d]/g, '')).filter(n => n.length >= 10);
 }
 
-processBtn.addEventListener('click', () => {
-  const files = vcfInput.files;
+function processFiles(files) {
   if (!files.length) {
-    alert("Pilih minimal satu file VCF dulu!");
+    outputBox.value = "";
+    countDisplay.textContent = "";
     return;
   }
 
   let allNumbers = [];
-
   let fileReaders = [];
+
   for (let file of files) {
     const reader = new FileReader();
     fileReaders.push(new Promise(resolve => {
@@ -40,10 +40,16 @@ processBtn.addEventListener('click', () => {
     // Hilangkan duplikat
     const uniqueNumbers = [...new Set(allNumbers)];
     outputBox.value = uniqueNumbers.join("\n");
-    alert("Proses selesai! Total nomor: " + uniqueNumbers.length);
+    countDisplay.textContent = `Total nomor: ${uniqueNumbers.length}`;
   });
+}
+
+// Proses otomatis saat file diupload
+vcfInput.addEventListener('change', () => {
+  processFiles(vcfInput.files);
 });
 
+// Download tombol tetap sama
 downloadBtn.addEventListener('click', () => {
   const text = outputBox.value.trim();
   if (!text) {
