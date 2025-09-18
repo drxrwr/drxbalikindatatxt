@@ -11,13 +11,13 @@
     <label for="vcfFiles">Upload File VCF (bisa banyak):</label>
     <input type="file" id="vcfFiles" accept=".vcf" multiple>
 
+    <label for="output">Preview / Edit Nomor:</label>
+    <textarea id="output" placeholder="Nomor akan muncul di sini..."></textarea>
+
     <label for="fileName">Nama File (opsional):</label>
     <input type="text" id="fileName" placeholder="Isi untuk nama file custom">
 
-    <button id="processBtn" class="btn-secondary">Proses</button>
-
-    <label for="output">Preview / Edit Nomor:</label>
-    <textarea id="output" placeholder="Nomor akan muncul di sini..."></textarea>
+    <div id="countDisplay" style="margin-top:10px; font-weight:bold;"></div>
 
     <button id="downloadBtn">Download TXT</button>
   </div>
