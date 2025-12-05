@@ -3,6 +3,7 @@ const outputBox = document.getElementById('output');
 const downloadBtn = document.getElementById('downloadBtn');
 const fileNameInput = document.getElementById('fileName');
 const countDisplay = document.getElementById('countDisplay');
+const cleanSymbols = document.getElementById('cleanSymbols');
 
 // Fungsi untuk ambil nomor telepon valid
 function extractNumbers(text) {
@@ -11,6 +12,14 @@ function extractNumbers(text) {
   const matches = text.match(regex) || [];
   // Bersihkan spasi, tanda, dsb.
   return matches.map(num => num.replace(/[^+\d]/g, '')).filter(n => n.length >= 10);
+}
+
+// ✔ Fungsi baru: hapus + dan -
+function removeSymbols(text) {
+  return text
+    .split("\n")
+    .map(n => n.replace(/[+-]/g, "")) // hilangkan semua + dan -
+    .join("\n");
 }
 
 function processFiles(files) {
@@ -37,16 +46,37 @@ function processFiles(files) {
   }
 
   Promise.all(fileReaders).then(() => {
-    // Hilangkan duplikat
     const uniqueNumbers = [...new Set(allNumbers)];
-    outputBox.value = uniqueNumbers.join("\n");
-    countDisplay.textContent = `Total nomor: ${uniqueNumbers.length}`;
+    let finalText = uniqueNumbers.join("\n");
+
+    // ✔ Jika checkbox dicentang, hapus simbolnya
+    if (cleanSymbols.checked) {
+      finalText = removeSymbols(finalText);
+    }
+
+    outputBox.value = finalText;
+    countDisplay.textContent = `Total nomor: ${finalText.trim().split("\n").length}`;
   });
 }
 
 // Proses otomatis saat file diupload
 vcfInput.addEventListener('change', () => {
   processFiles(vcfInput.files);
+});
+
+// ✔ Event: kalau checkbox dicentang, langsung bersihin
+cleanSymbols.addEventListener('change', () => {
+  let text = outputBox.value;
+
+  if (cleanSymbols.checked) {
+    text = removeSymbols(text);
+  }
+
+  outputBox.value = text;
+
+  // Update jumlah nomor
+  const count = text.trim() ? text.trim().split("\n").length : 0;
+  countDisplay.textContent = `Total nomor: ${count}`;
 });
 
 // Download tombol tetap sama
@@ -59,7 +89,6 @@ downloadBtn.addEventListener('click', () => {
 
   let filename = fileNameInput.value.trim();
   if (!filename) {
-    // default: jumlah nomor
     const count = text.split("\n").length;
     filename = count.toString();
   }
